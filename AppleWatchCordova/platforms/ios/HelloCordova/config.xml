@@ -23,4 +23,8 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <feature name="AppleWatch">
+        <param name="ios-package" value="AppleWatch" />
+        <param name="onload" value="true" />
+    </feature>
 </widget>
