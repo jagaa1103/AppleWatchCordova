@@ -7,3 +7,6 @@ This project maybe helps new developers in AppleWatch with Cordova. It's very si
   2. Create your Project.
         `$ cordova create hello com.example.hello HelloWorld` in your Terminal
   3. Add platform iOS in your project `$ cordova platform add ios`
+  4. Add plugin [cordova-plugin-apple-watch](https://github.com/leecrossley/cordova-plugin-apple-watch). This plugin is very good to develop Hybrid apps in phone with AppleWatch. 
+      Type in your Terminal: 
+      `cordova plugin add https://github.com/leecrossley/cordova-plugin-apple-watch.git`
