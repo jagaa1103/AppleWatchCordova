@@ -1,8 +1,8 @@
 {
-    "uk.co.ilee.applewatch": {
+    "de.twentysteps.cordova.watch": {
         "source": {
             "type": "git",
-            "url": "https://github.com/leecrossley/cordova-plugin-apple-watch.git",
+            "url": "https://github.com/20steps/cordova-plugin-watch",
             "subdir": "."
         }
     }

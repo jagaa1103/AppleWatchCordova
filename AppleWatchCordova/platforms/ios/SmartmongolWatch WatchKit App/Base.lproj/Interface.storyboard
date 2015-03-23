@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="7519.1" systemVersion="14C1510" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7513.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
+    </dependencies>
+    <scenes>
+        <!--Interface Controller-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller id="AgC-eL-Hgc" customClass="InterfaceController">
+                    <items>
+                        <label width="136" height="35" alignment="left" text="Hello" textAlignment="center" id="nil-Ke-SoR"/>
+                        <label width="136" height="46" alignment="left" text="jagaa" textAlignment="center" id="MPp-aN-jHb"/>
+                    </items>
+                    <connections>
+                        <outlet property="receivedDataLabel" destination="nil-Ke-SoR" id="nXm-fX-4Pa"/>
+                        <outlet property="responsedDataLabel" destination="MPp-aN-jHb" id="x5S-ab-u2w"/>
+                    </connections>
+                </controller>
+            </objects>
+        </scene>
+    </scenes>
+</document>
