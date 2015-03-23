@@ -9,6 +9,7 @@ This is the sample of Location App in Cordova app with AppleWatch plugin.
 4. Configure project 
     - AppGroup settings
 5. Add AppleWatch Target in project
+6. CoreLocation 
 
 
 ## Resources:
