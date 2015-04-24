@@ -10,7 +10,6 @@
 
 
 @interface InterfaceController()
-    @property (weak, nonatomic) IBOutlet WKInterfaceLabel *receivedDataLabel;
     @property (weak, nonatomic) IBOutlet WKInterfaceLabel *responsedDataLabel;
 @end
 
@@ -27,7 +26,7 @@
                                                     optionalDirectory:@"wormhole"];
     
     [wormhole listenForMessageWithIdentifier:@"testChannel" listener:^(id message) {
-        [self.receivedDataLabel setText:(NSString*)message];
+        [self.responsedDataLabel setText:(NSString*)message];
         
 //        NSString *response = [NSString stringWithFormat:@"%d",arc4random_uniform(50)];
 //        [self.responsedDataLabel setText:(NSString*)response];

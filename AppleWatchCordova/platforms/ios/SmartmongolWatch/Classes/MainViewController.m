@@ -111,7 +111,7 @@ static double lng;
 {
     // Black base color for background matches the native apps
     theWebView.backgroundColor = [UIColor blackColor];
-
+    _theWebView = theWebView;
     return [super webViewDidFinishLoad:theWebView];
 }
 
@@ -175,18 +175,18 @@ static double lng;
     CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
     
     // If the status is denied or only granted for when in use, display an alert
-//    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
-//        NSString *title;
-//        title = (status == kCLAuthorizationStatusDenied) ? @"Location services are off" : @"Background location is not enabled";
-//        NSString *message = @"To use background location you must turn on 'Always' in the Location Services Settings";
-//        
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-//                                                            message:message
-//                                                           delegate:self
-//                                                  cancelButtonTitle:@"Cancel"
-//                                                  otherButtonTitles:@"Settings", nil];
-//        [alertView show];
-//    }
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
+        NSString *title;
+        title = (status == kCLAuthorizationStatusDenied) ? @"Location services are off" : @"Background location is not enabled";
+        NSString *message = @"To use background location you must turn on 'Always' in the Location Services Settings";
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                            message:message
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Cancel"
+                                                  otherButtonTitles:@"Settings", nil];
+        [alertView show];
+    }
     if (status == kCLAuthorizationStatusNotDetermined) {
         [locationManager requestAlwaysAuthorization];
     }
@@ -206,10 +206,11 @@ static double lng;
     if (currentLocation != nil) {
             lat = currentLocation.coordinate.latitude;
             lng = currentLocation.coordinate.longitude;
-            NSLog(@"@>> latitude: %.6f",lat);
-            NSLog(@"@>> longitude: %.6f",lng);
+            NSLog(@"latitude: %.6f",lat);
+            NSLog(@"longitude: %.6f",lng);
             
             NSString * toJS = [NSString stringWithFormat:@"onLocationChanged(%.6f,%.6f)",lat, lng];
+            NSLog(toJS);
             [_theWebView stringByEvaluatingJavaScriptFromString:toJS];
     }
     

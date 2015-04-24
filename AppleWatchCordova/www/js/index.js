@@ -34,6 +34,16 @@ bindEvents: function() {
     // function, we must explicitly call 'app.receivedEvent(...);'
 onDeviceReady: function() {
     app.receivedEvent('deviceready');
+    if(window.cordova.plugins.Watch){
+        AppleWatch = window.cordova.plugins.Watch;
+        AppleWatch.initialize('group.smartmongol', 'wormhole');
+        AppleWatch.listen('responseChannel', function(message) {
+                     console.log(message);
+        });    
+    }else{
+        alert("Watch plugin is not ready");
+    }
+    
 },
     // Update DOM on a Received Event
 receivedEvent: function(id) {
@@ -50,17 +60,15 @@ receivedEvent: function(id) {
 
 app.initialize();
 
+var AppleWatch = null;
 
 function sendWatch(){
-    var Watch = window.cordova.plugins.Watch;
-    Watch.initialize('group.smartmongol', 'wormhole');
-    Watch.listen('responseChannel', function(message) {
-                 console.log(message);
-                 });
-    
-    setInterval(function () {
-                var message = parseInt(((Math.random())*100))+" ";
-                console.log(message);
-                Watch.sendMessage(message, 'testChannel');
-                }, 5000);
+    // AppleWatch.sendMessage(message, 'testChannel');
 }
+
+function onLocationChanged(lat, lon){
+    var message = "latitude: " + lat + " longitude: " + lon;
+    console.log(message);
+    document.getElementById("location").innerHTML = message;
+    AppleWatch.sendMessage(message, 'testChannel');
+};
