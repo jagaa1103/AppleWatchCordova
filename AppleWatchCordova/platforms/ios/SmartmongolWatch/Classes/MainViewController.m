@@ -29,6 +29,11 @@
 
 @implementation MainViewController
 
+CLLocationManager *locationManager;
+UIWebView* _theWebView;
+static double lat;
+static double lng;
+
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -75,6 +80,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [self gpsStart];
 }
 
 - (void)viewDidUnload
@@ -128,6 +134,104 @@
     return [super webView:theWebView shouldStartLoadWithRequest:request navigationType:navigationType];
 }
 */
+
+-(void) gpsStart{
+    if([self checkLocationServiceOn] == false){
+        NSString * toJS = [NSString stringWithFormat:@"onGpsDisabled()"];
+        [_theWebView stringByEvaluatingJavaScriptFromString:toJS];
+        return;
+    }
+    
+    locationManager = [[CLLocationManager alloc] init];
+    
+    locationManager.delegate = self;
+    [locationManager setDistanceFilter:1];
+    // for battery save
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    
+    if(IS_OS_8_OR_LATER) {
+        NSLog(@"IOS 8");
+        if ([locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [locationManager requestAlwaysAuthorization];
+        }
+    }
+    [locationManager startUpdatingLocation];
+}
+
+-(BOOL)checkLocationServiceOn{
+    UIDevice *device = [UIDevice currentDevice];
+    if (([device.systemVersion doubleValue] >= 4.0 && [CLLocationManager locationServicesEnabled]== NO )
+        || ([device.systemVersion doubleValue] < 4.0 && CLLocationManager.locationServicesEnabled == NO ) )
+    {
+        UIAlertView *servicesDisabledAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Location Services Disabled", nil) message:NSLocalizedString(@"Please set [iPhone home > Settings > Generals > Location Service : ON]", nil) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [servicesDisabledAlert show];
+        return FALSE;
+    }
+    return TRUE;
+}
+
+- (void)requestAlwaysAuthorization
+{
+    CLAuthorizationStatus status = [CLLocationManager authorizationStatus];
+    
+    // If the status is denied or only granted for when in use, display an alert
+//    if (status == kCLAuthorizationStatusAuthorizedWhenInUse || status == kCLAuthorizationStatusDenied) {
+//        NSString *title;
+//        title = (status == kCLAuthorizationStatusDenied) ? @"Location services are off" : @"Background location is not enabled";
+//        NSString *message = @"To use background location you must turn on 'Always' in the Location Services Settings";
+//        
+//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+//                                                            message:message
+//                                                           delegate:self
+//                                                  cancelButtonTitle:@"Cancel"
+//                                                  otherButtonTitles:@"Settings", nil];
+//        [alertView show];
+//    }
+    if (status == kCLAuthorizationStatusNotDetermined) {
+        [locationManager requestAlwaysAuthorization];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+        [[UIApplication sharedApplication] openURL:settingsURL];
+    }
+}
+
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    CLLocation *currentLocation = [locations lastObject];
+    
+    if (currentLocation != nil) {
+            lat = currentLocation.coordinate.latitude;
+            lng = currentLocation.coordinate.longitude;
+            NSLog(@"@>> latitude: %.6f",lat);
+            NSLog(@"@>> longitude: %.6f",lng);
+            
+            NSString * toJS = [NSString stringWithFormat:@"onLocationChanged(%.6f,%.6f)",lat, lng];
+            [_theWebView stringByEvaluatingJavaScriptFromString:toJS];
+    }
+    
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    NSLog(@"Location Manager Error : %@", error);
+    
+    [locationManager stopUpdatingLocation];
+    [NSTimer    scheduledTimerWithTimeInterval:2.0    target:self    selector:@selector(restartGPS)    userInfo:nil repeats:NO];
+}
+
+-(void)restartGPS{
+    if (locationManager) {
+        locationManager = nil;
+    }
+    locationManager = [[CLLocationManager alloc] init];
+    [locationManager setDistanceFilter:1];
+    [locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+    [locationManager setDelegate:self];
+    [locationManager startUpdatingLocation];
+}
 
 @end
 

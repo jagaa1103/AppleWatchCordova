@@ -105,7 +105,9 @@ static NSString * const MMWormholeNotificationName = @"MMWormholeNotificationNam
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:messageObject];
     NSString *filePath = [self filePathForIdentifier:identifier];
-    
+    NSLog(@" MMWormhole >> writeMessageObject identifier=%@", identifier);
+    NSLog(@" MMWormhole >> writeMessageObject filePath=%@", filePath);
+    NSLog(@" MMWormhole >> writeMessageObject data=%@", data);
     if (data == nil || filePath == nil) {
         return;
     }

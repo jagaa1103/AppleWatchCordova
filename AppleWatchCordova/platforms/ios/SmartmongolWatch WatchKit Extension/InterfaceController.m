@@ -29,10 +29,10 @@
     [wormhole listenForMessageWithIdentifier:@"testChannel" listener:^(id message) {
         [self.receivedDataLabel setText:(NSString*)message];
         
-        NSString *response = [NSString stringWithFormat:@"%d",arc4random_uniform(50)];
-        [self.responsedDataLabel setText:(NSString*)response];
-        
-        [wormhole passMessageObject:response identifier:@"responseChannel"];
+//        NSString *response = [NSString stringWithFormat:@"%d",arc4random_uniform(50)];
+//        [self.responsedDataLabel setText:(NSString*)response];
+//        
+//        [wormhole passMessageObject:response identifier:@"responseChannel"];
     }];
 
 }
